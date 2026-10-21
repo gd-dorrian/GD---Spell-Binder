@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>SpellBinder | Material Grimoire</title>
+<link href="assets/style_ab8734d2.css" rel="stylesheet"/>
+<link href="assets/style_9ebb5fb8.css" rel="stylesheet"/>
+<script src="assets/script_4eb92b7a.js"></script>
+<link href="assets/style_aac0f7df.css" rel="stylesheet"/>
+<script crossorigin="" src="assets/script_43c07cad.js"></script>
+<script crossorigin="" src="assets/script_e6b30c1b.js"></script>
+<script crossorigin="" src="assets/script_706d8a57.js"></script>
+<style>
+        :root {
+            --md-blue: #3b82f6; --md-green: #10b981; --md-red: #ef4444;
+            --md-surface: #111827; --md-surface-higher: #1f2937; --md-bg: #030712;
+            /* Stat blocks significantly darker for visibility on expanded cards */
+            --badge-bg: #070a13; 
+            --school-bg: #111827; 
+            --badge-text: #9ca3af;
+        }
+
+        body { background-color: var(--md-bg); color: #f3f4f6; font-family: 'Roboto', sans-serif; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
+
+        .md-card { background-color: var(--md-surface); border-radius: 16px; border: 1px solid #1f2937; margin-bottom: 12px; transition: all 0.2s ease; position: relative; overflow: hidden; }
+        .md-card-expanded { background-color: var(--md-surface-higher); border-color: #3b82f633; }
+
+        .stat-badge { background: var(--badge-bg); color: var(--badge-text); font-size: 10px; padding: 4px 8px; border-radius: 6px; display: flex; align-items: center; font-weight: 700; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.03); }
+        /* School badge kept different from standard stat badges */
+        .stat-badge-school { background: var(--school-bg); color: #6b7280; border: 1px solid #1f2937; }
+        .stat-badge-c { background: rgba(59, 130, 246, 0.1) !important; color: var(--md-blue) !important; border: 1px solid rgba(59, 130, 246, 0.3); }
+
+        .level-pill { font-size: 10px; font-weight: 900; color: #3b82f6; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
+
+        .dmg-chip { font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: 900; display: inline-flex; align-items: center; gap: 4px; }
+        .dmg-heal { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .dmg-atk { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .dmg-neutral { background: rgba(156, 163, 175, 0.1); color: #9ca3af; border: 1px solid rgba(156, 163, 175, 0.2); }
+
+        .action-badge { font-size: 12px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-weight: 900; }
+        .b-a { background: #374151; color: #9ca3af; }
+        .b-b { background: #064e3b; color: #10b981; border: 1px solid #10b98144; }
+        .b-r { background: #451a1a; color: #f87171; border: 1px solid #f8717144; }
+
+        .bottom-nav { background-color: rgba(3, 7, 18, 0.95); backdrop-filter: blur(20px); border-top: 1px solid #1f2937; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; padding: 12px 24px 32px; }
+        .nav-item { color: #4b5563; transition: color 0.2s; font-size: 10px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .nav-item.active { color: var(--md-blue); }
+
+        .level-header { font-family: 'Roboto Condensed', sans-serif; color: #3b82f6; letter-spacing: 0.25em; padding: 24px 0 12px 0; font-size: 11px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #1f2937; margin-bottom: 16px; margin-top: 16px; }
+
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: #1f2937; border-radius: 2px; }
+        input[type=range]::-webkit-slider-thumb { height: 22px; width: 22px; border-radius: 50%; background: var(--md-blue); cursor: pointer; -webkit-appearance: none; margin-top: -9px; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); border: 2px solid #030712; }
+
+        .filter-drawer { background-color: var(--md-surface); border-top-left-radius: 32px; border-top-right-radius: 32px; max-height: 90vh; overflow-y: auto; padding-bottom: 120px; }
+        .filter-drawer::-webkit-scrollbar { display: none; }
+        
+        .toggle-btn { background: #0d111a; border: 1px solid #1f2937; color: #4b5563; padding: 8px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center; }
+        .toggle-btn.active { border-color: var(--md-blue); color: white; background: rgba(59, 130, 246, 0.1); }
+    </style>
+<script>
+                window.load_data_from_csv = (filename) => {
+                    // Implementation needed when code is downloaded
+                };
+
+                window.save_data_to_csv = (filename, data) => {
+                    // Implementation needed when code is downloaded
+                };
+
+                window.call_llm = (system_prompt, user_messages, json_fields) => {
+                    // Implementation needed when code is downloaded
+                };
+            </script></head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+    const { useState, useMemo, useEffect } = React;
+
+    const CLASSES = ["All", "Bard", "Cleric", "Druid", "Paladin", "Ranger", "Sorcerer", "Warlock", "Wizard", "Artificer"];
+    const SCHOOLS = ["All", "Abjur.", "Conjur.", "Divin.", "Enchan.", "Evoc.", "Illus.", "Necro.", "Trans."];
+
+    const App = () => {
+        const [spellData, setSpellData] = useState([]);
+        const [loading, setLoading] = useState(true);
+        const [view, setView] = useState('all'); 
+        const [search, setSearch] = useState('');
+        const [filterClass, setFilterClass] = useState('All');
+        const [filterSchool, setFilterSchool] = useState('All');
+        const [minLevel, setMinLevel] = useState(0);
+        const [maxLevel, setMaxLevel] = useState(9);
+        const [preparedIds, setPreparedIds] = useState([]);
+        const [expandedId, setExpandedId] = useState(null);
+        const [showMenu, setShowMenu] = useState(false);
+        const [settings, setSettings] = useState({ showSchool: true, showRange: true, showTime: true });
+
+        useEffect(() => {
+            fetch('spells.json').then(r => r.json()).then(data => {
+                setSpellData(data);
+                setLoading(false);
+            }).catch(e => console.error("Archive not found, sir."));
+        }, []);
+
+        const togglePrepared = (id) => setPreparedIds(p => p.includes(id) ? p.filter(i => i !== id) : [...p, id]);
+        const toggleSetting = (key) => setSettings(s => ({...s, [key]: !s[key]}));
+
+        const filteredSpells = useMemo(() => {
+            let list = view === 'all' ? spellData : spellData.filter(s => preparedIds.includes(s.id));
+            if (view === 'all') {
+                if (filterClass !== 'All') list = list.filter(s => s.classes.includes(filterClass));
+                if (filterSchool !== 'All') list = list.filter(s => s.school === filterSchool);
+                list = list.filter(s => s.level >= minLevel && s.level <= maxLevel);
+            }
+            if (search) list = list.filter(s => s.name.toLowerCase().includes(search.toLowerCase()));
+            return list;
+        }, [view, filterClass, filterSchool, minLevel, maxLevel, search, preparedIds, spellData]);
+
+        const groupedSpells = useMemo(() => {
+            const groups = {};
+            filteredSpells.forEach(s => {
+                const label = s.level === 0 ? "CANTRIPS" : `LEVEL ${s.level}`;
+                if (!groups[label]) groups[label] = [];
+                groups[label].push(s);
+            });
+            return Object.entries(groups).sort((a,b) => {
+                const levelA = a[0] === "CANTRIPS" ? 0 : parseInt(a[0].split(' ')[1]);
+                const levelB = b[0] === "CANTRIPS" ? 0 : parseInt(b[0].split(' ')[1]);
+                return levelA - levelB;
+            });
+        }, [filteredSpells]);
+
+        const SpellCard = ({ spell }) => (
+            <div className={`md-card ${expandedId === spell.id ? 'md-card-expanded shadow-lg' : ''}`}
+                 onClick={() => setExpandedId(expandedId === spell.id ? null : spell.id)}>
+                <div className="flex justify-between items-start pr-4">
+                    <div className="flex items-start">
+                        <div onClick={(e) => { e.stopPropagation(); togglePrepared(spell.id); }} className="w-14 h-14 flex items-center justify-center cursor-pointer">
+                            <i className="material-icons text-xl">{preparedIds.includes(spell.id) ? 
+                                <span className="text-blue-500">star</span> : 
+                                <span className="text-gray-100/60">star_outline</span>}
+                            </i>
+                        </div>
+                        <div className="pt-4 pb-5">
+                            <h3 className="text-[15px] font-bold text-gray-100 leading-none mb-3 tracking-tight">{spell.name}</h3>
+                            <div className="flex gap-2 flex-wrap">
+                                {settings.showSchool && <div className="stat-badge stat-badge-school">{spell.school}</div>}
+                                {settings.showRange && <div className="stat-badge"><i className="material-icons text-[12px] mr-1">radar</i>{spell.range}</div>}
+                                <div className="stat-badge"><i className="material-icons text-[12px] mr-1">schedule</i>{spell.dur}</div>
+                                {spell.conc && <div className="stat-badge stat-badge-c">C</div>}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="pt-4 flex flex-col gap-1.5 items-center">
+                        {settings.showTime && (
+                           <span className={`action-badge ${spell.time.includes('Bonus') ? 'b-b' : (spell.time.includes('Reaction') ? 'b-r' : 'b-a')}`}>
+                               {spell.time.charAt(0)}
+                           </span>
+                        )}
+                        <div className="level-pill">{spell.level === 0 ? 'C' : spell.level}</div>
+                    </div>
+                </div>
+                {expandedId === spell.id && (
+                    <div className="px-5 pb-6 pt-0 border-t border-gray-800/20 animate__animated animate__fadeIn">
+                        <div className="flex items-center gap-3 mt-0 mb-4">
+                            <div className={`${spell['damage-class']} dmg-chip`}>
+                                <i className="material-icons text-[10px]">{spell['damage-class'] === 'dmg-heal' ? 'favorite' : (spell['damage-class'] === 'dmg-atk' ? 'bolt' : 'info')}</i>
+                                {spell.damage}
+                            </div>
+                        </div>
+                        <p className="text-sm text-gray-400 leading-relaxed mb-6">{spell.desc}</p>
+                        <div className="flex justify-between items-center text-[10px] font-mono italic">
+                            <span className="text-gray-600">COMPS: {spell.comp}</span>
+                            <a href={spell.source} target="_blank" onClick={(e) => e.stopPropagation()} className="text-blue-500 font-bold tracking-widest bg-blue-500/5 px-3 py-1 rounded">SOURCE</a>
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+
+        if (loading) return <div className="flex items-center justify-center min-h-screen"></div>;
+
+        return (
+            <div className="max-w-md mx-auto flex flex-col min-h-screen pb-32">
+                <div className="px-6 pt-10 pb-6 sticky top-0 bg-gray-950/95 backdrop-blur-md z-40">
+                    <h1 className="text-xl font-bold tracking-[0.2em] text-blue-500 flex items-center gap-2 mb-6 uppercase">
+                        <i className="material-icons text-xl">lens_blur</i> SpellBinder
+                    </h1>
+                    <div className="relative">
+                        <input className="w-full bg-gray-950 border border-gray-900 rounded-2xl py-4 px-12 text-sm outline-none focus:border-blue-500 placeholder-gray-700"
+                               placeholder="Search Spells..." value={search} onChange={(e) => setSearch(e.target.value)}/>
+                        <i className="material-icons absolute left-4 top-3.5 text-gray-700">search</i>
+                    </div>
+                </div>
+
+                <div className="px-4 flex-1">
+                    {view === 'all' ? (
+                        filteredSpells.map(s => <SpellCard key={s.id} spell={s} />)
+                    ) : (
+                        groupedSpells.map(([level, spells]) => (
+                            <div key={level}>
+                                <h2 className="level-header">{level}</h2>
+                                {spells.map(s => <SpellCard key={s.id} spell={s} />)}
+                            </div>
+                        ))
+                    )}
+                </div>
+
+                {showMenu && (
+                    <div className="fixed inset-0 bg-black/80 z-[100] animate__animated animate__fadeIn" onClick={() => setShowMenu(false)}>
+                        <div className="filter-drawer absolute bottom-0 left-0 right-0 p-8 space-y-7 animate__animated animate__slideInUp" onClick={e => e.stopPropagation()}>
+                            <div className="w-12 h-1 bg-gray-800 rounded-full mx-auto mb-2"></div>
+                            
+                            <div>
+                                <h3 className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-6">Spell Level Scope</h3>
+                                <div className="grid grid-cols-2 gap-8 px-1">
+                                    <div>
+                                        <div className="flex justify-between text-[11px] font-bold text-gray-400 mb-2"><span>Min</span> <span className="text-blue-500">{minLevel === 0 ? 'C' : minLevel}</span></div>
+                                        <input type="range" min="0" max="9" value={minLevel} onChange={(e) => setMinLevel(Math.min(parseInt(e.target.value), maxLevel))} />
+                                    </div>
+                                    <div>
+                                        <div className="flex justify-between text-[11px] font-bold text-gray-400 mb-2"><span>Max</span> <span className="text-blue-500">{maxLevel}</span></div>
+                                        <input type="range" min="0" max="9" value={maxLevel} onChange={(e) => setMaxLevel(Math.max(parseInt(e.target.value), minLevel))} />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="text-[10px] font-black text-gray-400 uppercase mb-3 tracking-widest">Caster Class</h3>
+                                <div className="flex flex-wrap gap-2">{CLASSES.map(c => (
+                                    <button key={c} onClick={() => setFilterClass(c)} className={`px-3 py-2 rounded-xl text-[11px] font-bold border ${filterClass === c ? 'bg-blue-600 border-blue-600 text-white shadow-lg' : 'bg-transparent border-gray-800 text-gray-500'}`}>{c}</button>
+                                ))}</div>
+                            </div>
+
+                            <div>
+                                <h3 className="text-[10px] font-black text-gray-400 uppercase mb-3 tracking-widest">School of Magic</h3>
+                                <div className="flex flex-wrap gap-2">{SCHOOLS.map(s => (
+                                    <button key={s} onClick={() => setFilterSchool(s)} className={`px-3 py-2 rounded-xl text-[11px] font-bold border ${filterSchool === s ? 'bg-blue-600 border-blue-600 text-white shadow-lg' : 'bg-transparent border-gray-800 text-gray-500'}`}>{s}</button>
+                                ))}</div>
+                            </div>
+
+                            <div>
+                                <h3 className="text-[10px] font-black text-gray-400 uppercase mb-3 tracking-widest">Metadata Toggles</h3>
+                                <div className="flex gap-2 w-full">
+                                    <button onClick={() => toggleSetting('showSchool')} className={`toggle-btn ${settings.showSchool ? 'active' : ''}`}><i className="material-icons text-sm">auto_fix_normal</i> School</button>
+                                    <button onClick={() => toggleSetting('showRange')} className={`toggle-btn ${settings.showRange ? 'active' : ''}`}><i className="material-icons text-sm">radar</i> Range</button>
+                                    <button onClick={() => toggleSetting('showTime')} className={`toggle-btn ${settings.showTime ? 'active' : ''}`}><i className="material-icons text-sm">timer</i> Casting</button>
+                                </div>
+                            </div>
+                            
+                            <button onClick={() => setShowMenu(false)} className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-[11px] tracking-[0.2em] uppercase">Update View</button>
+                        </div>
+                    </div>
+                )}
+
+                <div className="bottom-nav">
+                    <div className="flex justify-around items-center max-w-sm mx-auto">
+                        <button onClick={() => setView('all')} className={`nav-item ${view === 'all' ? 'active' : ''}`}><i className="material-icons text-2xl">menu_book</i><span>ALL</span></button>
+                        <button onClick={() => setView('prepared')} className={`nav-item ${view === 'prepared' ? 'active' : ''}`}><i className="material-icons text-2xl">stars</i><span>PREPARED ({preparedIds.length})</span></button>
+                        <button onClick={() => setShowMenu(true)} className="nav-item"><i className="material-icons text-2xl">more_horiz</i><span>MENU</span></button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+</script>
+</body>
+</html>
