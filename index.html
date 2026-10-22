@@ -5,13 +5,13 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
 <title>SpellBinder | Material Grimoire</title>
-<link href="assets/style_5852de31.css" rel="stylesheet"/>
-<link href="assets/style_dea01825.css" rel="stylesheet"/>
-<script src="assets/script_95992229.js"></script>
-<link href="assets/style_d26f2d5e.css" rel="stylesheet"/>
-<script crossorigin="" src="assets/script_f1e52994.js"></script>
-<script crossorigin="" src="assets/script_8608bbaa.js"></script>
-<script crossorigin="" src="assets/script_42bedf55.js"></script>
+<link href="assets/style_4ea09cb0.css" rel="stylesheet"/>
+<link href="assets/style_840b67a1.css" rel="stylesheet"/>
+<script src="assets/script_98ff9655.js"></script>
+<link href="assets/style_f677bd55.css" rel="stylesheet"/>
+<script crossorigin="" src="assets/script_20c38457.js"></script>
+<script crossorigin="" src="assets/script_8c4023a6.js"></script>
+<script crossorigin="" src="assets/script_eeff4348.js"></script>
 <style>
         :root {
             --md-blue: #3b82f6; --md-green: #10b981; --md-red: #ef4444;
@@ -88,8 +88,6 @@
         const [filterSchool, setFilterSchool] = useState('All');
         const [minLevel, setMinLevel] = useState(0);
         const [maxLevel, setMaxLevel] = useState(9);
-        
-        // PERSISTENCE LOGIC: Initialize from localStorage
         const [preparedIds, setPreparedIds] = useState(() => {
             const saved = localStorage.getItem('spellbinder_prepared');
             return saved ? JSON.parse(saved) : [];
@@ -106,7 +104,6 @@
             }).catch(e => console.error("Archive not found, sir."));
         }, []);
 
-        // PERSISTENCE LOGIC: Save to localStorage whenever preparedIds changes
         useEffect(() => {
             localStorage.setItem('spellbinder_prepared', JSON.stringify(preparedIds));
         }, [preparedIds]);
@@ -116,12 +113,15 @@
 
         const filteredSpells = useMemo(() => {
             let list = view === 'all' ? spellData : spellData.filter(s => preparedIds.includes(s.id));
+            
+            // Apply search and range/class filters only to the ALL view
             if (view === 'all') {
                 if (filterClass !== 'All') list = list.filter(s => s.classes.includes(filterClass));
                 if (filterSchool !== 'All') list = list.filter(s => s.school === filterSchool);
                 list = list.filter(s => s.level >= minLevel && s.level <= maxLevel);
+                if (search) list = list.filter(s => s.name.toLowerCase().includes(search.toLowerCase()));
             }
-            if (search) list = list.filter(s => s.name.toLowerCase().includes(search.toLowerCase()));
+            
             return list;
         }, [view, filterClass, filterSchool, minLevel, maxLevel, search, preparedIds, spellData]);
 
@@ -147,7 +147,7 @@
                         <div onClick={(e) => { e.stopPropagation(); togglePrepared(spell.id); }} className="w-14 h-14 flex items-center justify-center cursor-pointer">
                             <i className="material-icons text-xl">{preparedIds.includes(spell.id) ? 
                                 <span className="text-blue-500">star</span> : 
-                                <span className="text-gray-900/60">star_outline</span>}
+                                <span className="text-gray-100/60">star_outline</span>}
                             </i>
                         </div>
                         <div className="pt-4 pb-5">
@@ -191,15 +191,20 @@
 
         return (
             <div className="max-w-md mx-auto flex flex-col min-h-screen pb-32">
-                <div className="px-6 pt-10 pb-6 sticky top-0 bg-gray-950/95 backdrop-blur-md z-40">
+                {/* Non-sticky Header Area */}
+                <div className="px-6 pt-10 pb-6 bg-gray-950">
                     <h1 className="text-xl font-bold tracking-[0.2em] text-blue-500 flex items-center gap-2 mb-6 uppercase">
                         <i className="material-icons text-xl">lens_blur</i> SpellBinder
                     </h1>
-                    <div className="relative">
-                        <input className="w-full bg-gray-950 border border-gray-900 rounded-2xl py-4 px-12 text-sm outline-none focus:border-blue-500 placeholder-gray-700"
-                               placeholder="Search Spells..." value={search} onChange={(e) => setSearch(e.target.value)}/>
-                        <i className="material-icons absolute left-4 top-3.5 text-gray-700">search</i>
-                    </div>
+                    
+                    {/* Search display conditional on ALL view */}
+                    {view === 'all' && (
+                        <div className="relative animate__animated animate__fadeIn">
+                            <input className="w-full bg-gray-900 border border-gray-700 rounded-2xl py-4 px-12 text-sm outline-none focus:border-blue-500 text-gray-100 placeholder-gray-500 transition-colors"
+                                   placeholder="Search Library..." value={search} onChange={(e) => setSearch(e.target.value)}/>
+                            <i className="material-icons absolute left-4 top-3.5 text-gray-500">search</i>
+                        </div>
+                    )}
                 </div>
 
                 <div className="px-4 flex-1">
