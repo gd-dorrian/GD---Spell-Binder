@@ -20,6 +20,7 @@
             --school-bg: #111827; 
             --badge-text: #9ca3af;
         }
+        .level-header:first-of-type {maring-top: 0;}
 
         body { background-color: var(--md-bg); color: #f3f4f6; font-family: 'Roboto', sans-serif; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
 
@@ -193,13 +194,13 @@
             <div className="max-w-md mx-auto flex flex-col min-h-screen pb-32">
                 {/* Non-sticky Header Area */}
                 <div className="px-6 pt-10 pb-6 bg-gray-950">
-                    <h1 className="text-xl font-bold tracking-[0.2em] text-blue-500 flex items-center gap-2 mb-6 uppercase">
+                    <h1 className="text-xl font-bold tracking-[0.2em] text-blue-500 mt-2 flex items-center gap-2 uppercase">
                         <i className="material-icons text-xl">lens_blur</i> SpellBinder
                     </h1>
                     
                     {/* Search display conditional on ALL view */}
                     {view === 'all' && (
-                        <div className="relative animate__animated animate__fadeIn">
+                        <div className="relative animate__animated animate__fadeIn mt-4">
                             <input className="w-full bg-gray-900 border border-gray-700 rounded-2xl py-4 px-12 text-sm outline-none focus:border-blue-500 text-gray-100 placeholder-gray-500 transition-colors"
                                    placeholder="Search Library..." value={search} onChange={(e) => setSearch(e.target.value)}/>
                             <i className="material-icons absolute left-4 top-3.5 text-gray-500">search</i>
