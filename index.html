@@ -5,13 +5,13 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
 <title>SpellBinder | Material Grimoire</title>
-<link href="assets/style_4ea09cb0.css" rel="stylesheet"/>
-<link href="assets/style_840b67a1.css" rel="stylesheet"/>
-<script src="assets/script_98ff9655.js"></script>
-<link href="assets/style_f677bd55.css" rel="stylesheet"/>
-<script crossorigin="" src="assets/script_20c38457.js"></script>
-<script crossorigin="" src="assets/script_8c4023a6.js"></script>
-<script crossorigin="" src="assets/script_eeff4348.js"></script>
+<link href="assets/style_a98014ab.css" rel="stylesheet"/>
+<link href="assets/style_c4897022.css" rel="stylesheet"/>
+<script src="assets/script_bd1bc3a0.js"></script>
+<link href="assets/style_c7f7dfc0.css" rel="stylesheet"/>
+<script crossorigin="" src="assets/script_2dbd2011.js"></script>
+<script crossorigin="" src="assets/script_21b56b34.js"></script>
+<script crossorigin="" src="assets/script_dc95f963.js"></script>
 <style>
         :root {
             --md-blue: #3b82f6; --md-green: #10b981; --md-red: #ef4444;
@@ -20,7 +20,6 @@
             --school-bg: #111827; 
             --badge-text: #9ca3af;
         }
-        .level-header:first-of-type {maring-top: 0;}
 
         body { background-color: var(--md-bg); color: #f3f4f6; font-family: 'Roboto', sans-serif; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
 
@@ -115,7 +114,6 @@
         const filteredSpells = useMemo(() => {
             let list = view === 'all' ? spellData : spellData.filter(s => preparedIds.includes(s.id));
             
-            // Apply search and range/class filters only to the ALL view
             if (view === 'all') {
                 if (filterClass !== 'All') list = list.filter(s => s.classes.includes(filterClass));
                 if (filterSchool !== 'All') list = list.filter(s => s.school === filterSchool);
@@ -172,15 +170,22 @@
                 </div>
                 {expandedId === spell.id && (
                     <div className="px-5 pb-6 pt-0 border-t border-gray-800/20 animate__animated animate__fadeIn">
-                        <div className="flex items-center gap-3 mt-0 mb-4">
+                        <div className="flex items-center gap-3 mt-4 mb-4">
                             <div className={`${spell['damage-class']} dmg-chip`}>
                                 <i className="material-icons text-[10px]">{spell['damage-class'] === 'dmg-heal' ? 'favorite' : (spell['damage-class'] === 'dmg-atk' ? 'bolt' : 'info')}</i>
                                 {spell.damage}
                             </div>
                         </div>
                         <p className="text-sm text-gray-400 leading-relaxed mb-6">{spell.desc}</p>
-                        <div className="flex justify-between items-center text-[10px] font-mono italic">
-                            <span className="text-gray-600">COMPS: {spell.comp}</span>
+                        <div className="flex justify-between items-end text-[10px] font-mono italic">
+                            <div className="flex flex-col gap-2">
+                                <span className="text-gray-600">COMPS: {spell.comp}</span>
+                                <div className="flex flex-wrap gap-1">
+                                    {spell.classes.map(cls => (
+                                        <div key={cls} className="stat-badge stat-badge-school py-0.5 px-1.5 text-[9px] lowercase italic opacity-80">{cls}</div>
+                                    ))}
+                                </div>
+                            </div>
                             <a href={spell.source} target="_blank" onClick={(e) => e.stopPropagation()} className="text-blue-500 font-bold tracking-widest bg-blue-500/5 px-3 py-1 rounded">SOURCE</a>
                         </div>
                     </div>
@@ -192,15 +197,13 @@
 
         return (
             <div className="max-w-md mx-auto flex flex-col min-h-screen pb-32">
-                {/* Non-sticky Header Area */}
                 <div className="px-6 pt-10 pb-6 bg-gray-950">
-                    <h1 className="text-xl font-bold tracking-[0.2em] text-blue-500 mt-2 flex items-center gap-2 uppercase">
+                    <h1 className="text-xl font-bold tracking-[0.2em] text-blue-500 flex items-center gap-2 mb-6 uppercase">
                         <i className="material-icons text-xl">lens_blur</i> SpellBinder
                     </h1>
                     
-                    {/* Search display conditional on ALL view */}
                     {view === 'all' && (
-                        <div className="relative animate__animated animate__fadeIn mt-4">
+                        <div className="relative animate__animated animate__fadeIn">
                             <input className="w-full bg-gray-900 border border-gray-700 rounded-2xl py-4 px-12 text-sm outline-none focus:border-blue-500 text-gray-100 placeholder-gray-500 transition-colors"
                                    placeholder="Search Library..." value={search} onChange={(e) => setSearch(e.target.value)}/>
                             <i className="material-icons absolute left-4 top-3.5 text-gray-500">search</i>

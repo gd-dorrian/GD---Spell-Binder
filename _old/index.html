@@ -5,22 +5,22 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
 <title>SpellBinder | Material Grimoire</title>
-<link href="assets/style_ab8734d2.css" rel="stylesheet"/>
-<link href="assets/style_9ebb5fb8.css" rel="stylesheet"/>
-<script src="assets/script_4eb92b7a.js"></script>
-<link href="assets/style_aac0f7df.css" rel="stylesheet"/>
-<script crossorigin="" src="assets/script_43c07cad.js"></script>
-<script crossorigin="" src="assets/script_e6b30c1b.js"></script>
-<script crossorigin="" src="assets/script_706d8a57.js"></script>
+<link href="assets/style_4ea09cb0.css" rel="stylesheet"/>
+<link href="assets/style_840b67a1.css" rel="stylesheet"/>
+<script src="assets/script_98ff9655.js"></script>
+<link href="assets/style_f677bd55.css" rel="stylesheet"/>
+<script crossorigin="" src="assets/script_20c38457.js"></script>
+<script crossorigin="" src="assets/script_8c4023a6.js"></script>
+<script crossorigin="" src="assets/script_eeff4348.js"></script>
 <style>
         :root {
             --md-blue: #3b82f6; --md-green: #10b981; --md-red: #ef4444;
             --md-surface: #111827; --md-surface-higher: #1f2937; --md-bg: #030712;
-            /* Stat blocks significantly darker for visibility on expanded cards */
             --badge-bg: #070a13; 
             --school-bg: #111827; 
             --badge-text: #9ca3af;
         }
+        .level-header:first-of-type {maring-top: 0;}
 
         body { background-color: var(--md-bg); color: #f3f4f6; font-family: 'Roboto', sans-serif; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
 
@@ -28,7 +28,6 @@
         .md-card-expanded { background-color: var(--md-surface-higher); border-color: #3b82f633; }
 
         .stat-badge { background: var(--badge-bg); color: var(--badge-text); font-size: 10px; padding: 4px 8px; border-radius: 6px; display: flex; align-items: center; font-weight: 700; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.03); }
-        /* School badge kept different from standard stat badges */
         .stat-badge-school { background: var(--school-bg); color: #6b7280; border: 1px solid #1f2937; }
         .stat-badge-c { background: rgba(59, 130, 246, 0.1) !important; color: var(--md-blue) !important; border: 1px solid rgba(59, 130, 246, 0.3); }
 
@@ -90,7 +89,11 @@
         const [filterSchool, setFilterSchool] = useState('All');
         const [minLevel, setMinLevel] = useState(0);
         const [maxLevel, setMaxLevel] = useState(9);
-        const [preparedIds, setPreparedIds] = useState([]);
+        const [preparedIds, setPreparedIds] = useState(() => {
+            const saved = localStorage.getItem('spellbinder_prepared');
+            return saved ? JSON.parse(saved) : [];
+        });
+
         const [expandedId, setExpandedId] = useState(null);
         const [showMenu, setShowMenu] = useState(false);
         const [settings, setSettings] = useState({ showSchool: true, showRange: true, showTime: true });
@@ -102,17 +105,24 @@
             }).catch(e => console.error("Archive not found, sir."));
         }, []);
 
+        useEffect(() => {
+            localStorage.setItem('spellbinder_prepared', JSON.stringify(preparedIds));
+        }, [preparedIds]);
+
         const togglePrepared = (id) => setPreparedIds(p => p.includes(id) ? p.filter(i => i !== id) : [...p, id]);
         const toggleSetting = (key) => setSettings(s => ({...s, [key]: !s[key]}));
 
         const filteredSpells = useMemo(() => {
             let list = view === 'all' ? spellData : spellData.filter(s => preparedIds.includes(s.id));
+            
+            // Apply search and range/class filters only to the ALL view
             if (view === 'all') {
                 if (filterClass !== 'All') list = list.filter(s => s.classes.includes(filterClass));
                 if (filterSchool !== 'All') list = list.filter(s => s.school === filterSchool);
                 list = list.filter(s => s.level >= minLevel && s.level <= maxLevel);
+                if (search) list = list.filter(s => s.name.toLowerCase().includes(search.toLowerCase()));
             }
-            if (search) list = list.filter(s => s.name.toLowerCase().includes(search.toLowerCase()));
+            
             return list;
         }, [view, filterClass, filterSchool, minLevel, maxLevel, search, preparedIds, spellData]);
 
@@ -182,15 +192,20 @@
 
         return (
             <div className="max-w-md mx-auto flex flex-col min-h-screen pb-32">
-                <div className="px-6 pt-10 pb-6 sticky top-0 bg-gray-950/95 backdrop-blur-md z-40">
-                    <h1 className="text-xl font-bold tracking-[0.2em] text-blue-500 flex items-center gap-2 mb-6 uppercase">
+                {/* Non-sticky Header Area */}
+                <div className="px-6 pt-10 pb-6 bg-gray-950">
+                    <h1 className="text-xl font-bold tracking-[0.2em] text-blue-500 mt-2 flex items-center gap-2 uppercase">
                         <i className="material-icons text-xl">lens_blur</i> SpellBinder
                     </h1>
-                    <div className="relative">
-                        <input className="w-full bg-gray-950 border border-gray-900 rounded-2xl py-4 px-12 text-sm outline-none focus:border-blue-500 placeholder-gray-700"
-                               placeholder="Search Spells..." value={search} onChange={(e) => setSearch(e.target.value)}/>
-                        <i className="material-icons absolute left-4 top-3.5 text-gray-700">search</i>
-                    </div>
+                    
+                    {/* Search display conditional on ALL view */}
+                    {view === 'all' && (
+                        <div className="relative animate__animated animate__fadeIn mt-4">
+                            <input className="w-full bg-gray-900 border border-gray-700 rounded-2xl py-4 px-12 text-sm outline-none focus:border-blue-500 text-gray-100 placeholder-gray-500 transition-colors"
+                                   placeholder="Search Library..." value={search} onChange={(e) => setSearch(e.target.value)}/>
+                            <i className="material-icons absolute left-4 top-3.5 text-gray-500">search</i>
+                        </div>
+                    )}
                 </div>
 
                 <div className="px-4 flex-1">
@@ -212,7 +227,7 @@
                             <div className="w-12 h-1 bg-gray-800 rounded-full mx-auto mb-2"></div>
                             
                             <div>
-                                <h3 className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-6">Spell Level Scope</h3>
+                                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6">Spell Level Scope</h3>
                                 <div className="grid grid-cols-2 gap-8 px-1">
                                     <div>
                                         <div className="flex justify-between text-[11px] font-bold text-gray-400 mb-2"><span>Min</span> <span className="text-blue-500">{minLevel === 0 ? 'C' : minLevel}</span></div>
@@ -254,7 +269,7 @@
                 )}
 
                 <div className="bottom-nav">
-                    <div className="flex justify-around items-center max-w-sm mx-auto">
+                    <div className="flex justify-around items-center max-sm mx-auto">
                         <button onClick={() => setView('all')} className={`nav-item ${view === 'all' ? 'active' : ''}`}><i className="material-icons text-2xl">menu_book</i><span>ALL</span></button>
                         <button onClick={() => setView('prepared')} className={`nav-item ${view === 'prepared' ? 'active' : ''}`}><i className="material-icons text-2xl">stars</i><span>PREPARED ({preparedIds.length})</span></button>
                         <button onClick={() => setShowMenu(true)} className="nav-item"><i className="material-icons text-2xl">more_horiz</i><span>MENU</span></button>
