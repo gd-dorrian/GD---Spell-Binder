@@ -856,9 +856,9 @@
             "Wizard"
         ],
         "source": "https://dnd5e.wikidot.com/spell:color-spray",
-        "desc": "A dazzling array of flashing, colored light springs from your hand. Roll 6d10; the total is how many hit points of creatures this spell can effect. Creatures in a 15-foot cone originating from you are affected in ascending order of their current hit points (ignoring unconscious creatures and creatures that can't see).",
-        "damage": "Utility",
-        "damage-class": "dmg-neutral"
+        "desc": "Produces a 15-foot cone of flashing, colored light that blinds creatures with the lowest current hit points until the end of your next turn, affecting them in ascending order based on a rolled total of 6d10 hit points. Unconscious creatures and those unable to see are unaffected, and each creature's current hit points are subtracted from the total, with no creature affected if its hit points exceed the remaining pool.",
+        "damage": "Total pool of 6d10 hit points",
+        "damage-class": "dmg-atk"
     },
     {
         "id": "command",
@@ -876,7 +876,7 @@
         ],
         "source": "https://dnd5e.wikidot.com/spell:command",
         "desc": "You speak a one-word command to a creature you can see within range. The target must succeed on a wisdom saving throw or follow the command on its next turn. The spell has no effect if the target is undead, if it doesn't understand your language, or if your command is directly harmful to it.",
-        "damage": "Utility",
+        "damage": "Wis. save",
         "damage-class": "dmg-neutral"
     },
     {
@@ -893,8 +893,8 @@
             "Cleric"
         ],
         "source": "https://dnd5e.wikidot.com/spell:commune",
-        "desc": "You contact your deity or a divine proxy and ask up to three questions that can be answered with a yes or no. You must ask your questions before the spell ends. You receive a correct answer for each question.",
-        "damage": "Utility",
+        "desc": "You contact your deity or divine proxy to ask up to three yes-or-no questions before the spell ends, receiving correct answers, 'unclear' for topics beyond their knowledge, or a short phrase from the DM to avoid misleading responses. Casting this spell two or more times before a long rest incurs a cumulative 25 percent secret chance per additional casting of receiving no answer.",
+        "damage": "3 yes-or-no questions",
         "damage-class": "dmg-neutral"
     },
     {
@@ -913,7 +913,7 @@
         ],
         "source": "https://dnd5e.wikidot.com/spell:commune-with-nature",
         "desc": "You briefly become one with nature and gain knowledge of the surrounding territory. In the outdoors, the spell gives you knowledge of the land within 3 miles of you. In caves and other natural underground settings, the radius is limited to 300 feet. The spell doesn't function where nature has been replaced by construction, such as in dungeons and towns.",
-        "damage": "Utility",
+        "damage": "300ft knowledge",
         "damage-class": "dmg-neutral"
     },
     {
