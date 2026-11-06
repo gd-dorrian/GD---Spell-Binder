@@ -61,6 +61,6 @@ foreach ($indexData['results'] as $spell) {
     ob_flush(); flush();
 }
 
-file_put_contents('spells.json', json_encode($grimoire, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+file_put_contents('spells--generated.json', json_encode($grimoire, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 echo "</div><h2 class='success'>Synchronization Complete.</h2>";
 ?>
